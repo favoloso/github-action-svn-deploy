@@ -1,0 +1,35 @@
+name: 'Commit SVN'
+description: 'Effettua il commit della repository su SVN'
+author: 'favoloso'
+branding:
+  icon: 'package'
+  color: 'blue'
+inputs:
+  dry-run:
+    description: "Esegue l'operazione senza committare."
+    default: false
+  svn-username:
+    description: 'Username SVN'
+    required: true
+  svn-password:
+    description: 'Password SVN'
+    required: true
+  svn-url:
+    description: 'URL della repository SVN'
+    required: true
+  svn-path:
+    description: "Path all'interno repository SVN"
+    default: 'trunk'
+runs:
+  using: 'composite'
+  steps:
+    - id: deploy
+      env:
+        INPUT_SVN_USERNAME: ${{ inputs.svn-username }}
+        INPUT_SVN_PASSWORD: ${{ inputs.svn-password }}
+        INPUT_SVN_URL: ${{ inputs.svn-url }}
+        INPUT_SVN_PATH: ${{ inputs.svn-path }}
+        INPUT_DRY_RUN: ${{ inputs.dry-run }}
+      run: |
+        npx zx ${{ github.action_path }}/deploy.mjs
+      shell: bash
