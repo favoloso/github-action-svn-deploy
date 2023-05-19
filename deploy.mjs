@@ -42,7 +42,7 @@ if (!fs.existsSync(svnIncludePath)) {
 
 // Ci assicuriamo che il path di SVN termini con uno slash
 const svnTargetPath = process.env.INPUT_SVN_PATH.replace(/\/$/, '') + '/';
-await $`rsync -rc -v --include-from=${svnIncludePath} --exclude="*" ${process.env.GITHUB_WORKSPACE + '/'} ${svnTargetPath} --delete --delete-excluded`;
+await $`rsync -rc -v --include=".svn/" --include-from=${svnIncludePath} --exclude="*" ${process.env.GITHUB_WORKSPACE + '/'} ${svnTargetPath} --delete --delete-excluded`;
 
 // Dopo l'rsync verifico che non ci siano file di Git
 if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {

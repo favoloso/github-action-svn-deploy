@@ -40,6 +40,11 @@ Path al file che contiene l'elenco dei path da includere nel commit. È obbligat
 Vedere `man rsync` per la documentazione di `--include-from`.
 È l'opposto di un file `.gitignore`.
 
+#### Note sui file inclusi
+
+- Le cartelle devono essere indicate con lo **/ finale** (es. `assets/`)
+- Le cartelle e i file annidati devono avere più entry che includono anche la cartella superiore (es. `assets/` e `assets/images/`, solo `assets/images/` non funziona)
+
 ### `dry-run`
 
 Se impostato a `true` non effettua il commit su SVN, ma mostra solo le modifiche che verranno effettuate.
