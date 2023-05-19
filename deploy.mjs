@@ -22,7 +22,7 @@ if (!process.env.INPUT_SVN_PATH) {
 }
 
 cd(process.env.GITHUB_WORKSPACE);
-const shortHash = await $`git rev-parse --short ${process.env.GITHUB_SHA}`;
+const shortHash = (await $`git rev-parse --short ${process.env.GITHUB_SHA}`).stdout.trim();
 
 const svnDir = `${process.env.HOME}/svn-repo`;
 const svnAuthFlags = [
@@ -33,10 +33,11 @@ const svnAuthFlags = [
   `--no-auth-cache`
 ]
 
-echo`➤ Checkout della repository SVN...`
-await $`svn checkout ${process.env.INPUT_SVN_URL} ${svnDir} --depth immediates ${svnAuthFlags}`;
-cd(svnDir);
-await $`svn update --set-depth infinity ${process.env.INPUT_SVN_PATH} ${svnAuthFlags}`;
+await spinner('➤ Checkout della repository SVN...', async () => {
+  await $`svn checkout ${process.env.INPUT_SVN_URL} ${svnDir} --depth immediates ${svnAuthFlags}`;
+  cd(svnDir);
+  await $`svn update --set-depth infinity ${process.env.INPUT_SVN_PATH} ${svnAuthFlags}`;
+});
 
 echo`➤ Copio i file...`
 const svnIncludePath = path.join(process.env.GITHUB_WORKSPACE, process.env.INPUT_SVN_INCLUDE_FROM);
