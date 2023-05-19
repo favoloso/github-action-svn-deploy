@@ -21,28 +21,28 @@ if (!process.env.INPUT_SVN_PATH) {
 
 const svnDir = `${process.env.HOME}/svn-repo`;
 const svnAuthFlags = [
-  `--username`,
-  process.env.INPUT_SVN_USERNAME
+  `--username `,
+  process.env.INPUT_SVN_USERNAME,
   `--password`,
   process.env.INPUT_SVN_PASSWORD,
   `--no-auth-cache`
 ]
 
 echo`➤ Checkout della repository SVN...`
-await $`svn checkout "${process.env.INPUT_SVN_URL}" "${svnDir}" --depth immediates ${svnAuthFlags}`;
+await $`svn checkout ${process.env.INPUT_SVN_URL} ${svnDir} --depth immediates ${svnAuthFlags}`;
 cd(svnDir);
-await $`svn update --set-depth infinity "${process.env.INPUT_SVN_PATH}" ${svnAuthFlags}`;
+await $`svn update --set-depth infinity ${process.env.INPUT_SVN_PATH} ${svnAuthFlags}`;
 
 echo`➤ Copio i file...`
 if (!fs.existsSync(path.join(process.env.GITHUB_WORKSPACE, '.svnignore'))) {
   echo`ℹ︎ Impossibile trovare il file .svnignore, annullo il deploy.`;
   await $`exit 1`;
 }
-await $`rsync -rc --exclude-from="${process.env.GITHUB_WORKSPACE}/.svnignore" "${process.env.GITHUB_WORKSPACE}/" "${process.env.INPUT_SVN_PATH}" --delete --delete-excluded`;
+await $`rsync -rc --exclude-from=${process.env.GITHUB_WORKSPACE + '/.svnignore'} ${process.env.GITHUB_WORKSPACE + '/'} ${process.env.INPUT_SVN_PATH} --delete --delete-excluded`;
 
 echo`➤ Preparo i file per il commit...`
 await $`svn add . --force`; // > /dev/null
-await $`svn status "${process.env.INPUT_SVN_PATH}" | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@`; // > /dev/null
+await $`svn status ${process.env.INPUT_SVN_PATH} | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@`; // > /dev/null
 await $`svn update`;
 await $`svn status`;
 
@@ -53,7 +53,7 @@ if (process.env.INPUT_DRY_RUN) {
 }
 else {
   echo`➤ Commit...`
-  await $`svn commit -m "Aggiornamento automatico v${version}" --non-interactive ${svnAuthFlags}`;
+  await $`svn commit -m ${`Aggiornamento automatico v${version}`} --non-interactive ${svnAuthFlags}`;
 }
 
 echo`✓ Rilasciato su SVN.`;
