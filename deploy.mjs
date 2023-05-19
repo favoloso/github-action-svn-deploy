@@ -21,8 +21,10 @@ if (!process.env.INPUT_SVN_PATH) {
 
 const svnDir = `${process.env.HOME}/svn-repo`;
 const svnAuthFlags = [
-  `--username ${process.env.INPUT_SVN_USERNAME}`,
-  `--password ${process.env.INPUT_SVN_PASSWORD}`,
+  `--username`,
+  process.env.INPUT_SVN_USERNAME
+  `--password`,
+  process.env.INPUT_SVN_PASSWORD,
   `--no-auth-cache`
 ]
 
