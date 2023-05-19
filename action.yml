@@ -20,6 +20,9 @@ inputs:
   svn-path:
     description: "Path all'interno repository SVN"
     default: 'trunk'
+  svn-include-from:
+    description: 'Path del file .svninclude che definisce l\'elenco dei file da includere con rsync. Vedere `man rsync` alla voce "--include-from" e "FILTER RULES" per maggiori informazioni'
+    default: '.svninclude'
   package-json-path:
     description: 'Path del package.json da cui estrarre la versione'
     default: 'package.json'
@@ -38,6 +41,7 @@ runs:
         INPUT_SVN_PASSWORD: ${{ inputs.svn-password }}
         INPUT_SVN_URL: ${{ inputs.svn-url }}
         INPUT_SVN_PATH: ${{ inputs.svn-path }}
+        INPUT_SVN_INCLUDE_FROM: ${{ inputs.svn-include-from }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
         INPUT_ALLOW_GIT_FILES: ${{ inputs.allow-git-files }}
         INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}

@@ -27,11 +27,18 @@ jobs:
           svn-username: ${{ secrets.SVN_USERNAME }}
           svn-password: ${{ secrets.SVN_PASSWORD }}
           svn-url: ${{ secrets.SVN_URL }}
+          svn-include-from: .svninclude
           svn-path: trunk
           dry-run: true # Opzionale, di default è false
 ```
 
 ## Opzioni
+
+### `svn-include-from`
+
+Path al file che contiene l'elenco dei path da includere nel commit. È obbligatorio e puntare ad un file esistente che descrivere un elenco di file da includere nel commit.
+Vedere `man rsync` per la documentazione di `--include-from`.
+È l'opposto di un file `.gitignore`.
 
 ### `dry-run`
 

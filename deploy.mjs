@@ -34,21 +34,22 @@ cd(svnDir);
 await $`svn update --set-depth infinity ${process.env.INPUT_SVN_PATH} ${svnAuthFlags}`;
 
 echo`➤ Copio i file...`
-if (!fs.existsSync(path.join(process.env.GITHUB_WORKSPACE, '.svnignore'))) {
-  echo`ℹ︎ Impossibile trovare il file .svnignore, annullo il deploy.`;
+const svnIncludePath = path.join(process.env.GITHUB_WORKSPACE, process.env.INPUT_SVN_INCLUDE_FROM);
+if (!fs.existsSync(svnIncludePath)) {
+  echo`ℹ︎ Impossibile trovare il file ${svnIncludePath}, annullo il deploy.`;
   await $`exit 1`;
 }
-await $`rsync -rc --exclude-from=${process.env.GITHUB_WORKSPACE + '/.svnignore'} ${process.env.GITHUB_WORKSPACE + '/'} ${process.env.INPUT_SVN_PATH} --delete --delete-excluded`;
+await $`rsync -rc --include="*/" --include-from=${svnIncludePath} --exclude="*" --prune-empty-dirs ${process.env.GITHUB_WORKSPACE + '/'} ${process.env.INPUT_SVN_PATH} --delete --delete-excluded`;
 
 // Dopo l'rsync verifico che non ci siano file di Git
 if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
   echo`➤ Controllo i file di Git...`;
   if (fs.existsSync(path.join(svnDir, '.git'))) {
-    echo`ℹ︎ Trovata cartella .git, annullo il deploy. Aggiungerla a .svnignore.`;
+    echo`ℹ︎ Trovata cartella .git, annullo il deploy.`;
     await $`exit 1`;
   }
   if (fs.existsSync(path.join(svnDir, '.github'))) {
-    echo`ℹ︎ Trovata cartella .github, annullo il deploy. Aggiungerla a .svnignore.`;
+    echo`ℹ︎ Trovata cartella .github, annullo il deploy.`;
     await $`exit 1`;
   }
 }
@@ -73,7 +74,7 @@ if (process.env.INPUT_DRY_RUN === 'true') {
 }
 else {
   echo`➤ Commit...`
-  await $`svn commit -m ${`Aggiornamento automatico v${version}`} --non-interactive ${svnAuthFlags}`;
+  await $`svn commit -m ${commitMessage} --non-interactive ${svnAuthFlags}`;
 }
 
 echo`✓ Rilasciato su SVN.`;
