@@ -42,7 +42,7 @@ Vedere `man rsync` per la documentazione di `--include-from`.
 
 #### Note sui file inclusi
 
-- Le cartelle devono essere indicate con lo **/ finale** (es. `assets/`)
+- Le cartelle devono essere indicate con lo **/ finale** e tre asterischi `***`, (es. `assets/***`)
 - Le cartelle e i file annidati devono avere più entry che includono anche la cartella superiore (es. `assets/` e `assets/images/`, solo `assets/images/` non funziona)
 
 ### `dry-run`
