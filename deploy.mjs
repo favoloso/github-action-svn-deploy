@@ -82,7 +82,7 @@ const commitMessage = process.env.INPUT_COMMIT_MESSAGE
   .replace(/%sha%/g, shortHash);
 echo`ℹ︎ Commit message: ${commitMessage}`;
 
-if (process.env.INPUT_DRY_RUN === 'true') {
+if (process.env.INPUT_DRY_RUN !== 'false') {
   echo`➤ Dry run: salto il commit.`
 }
 else {
