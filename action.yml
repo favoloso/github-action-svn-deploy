@@ -46,6 +46,7 @@ runs:
         INPUT_ALLOW_GIT_FILES: ${{ inputs.allow-git-files }}
         INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}
         INPUT_PACKAGE_JSON_PATH: ${{ inputs.package-json-path }}
+        FORCE_COLOR: "1" # Per chalk & GH actions
       run: |
         npx zx ${{ github.action_path }}/deploy.mjs
       shell: bash
