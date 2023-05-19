@@ -40,6 +40,19 @@ if (!fs.existsSync(path.join(process.env.GITHUB_WORKSPACE, '.svnignore'))) {
 }
 await $`rsync -rc --exclude-from=${process.env.GITHUB_WORKSPACE + '/.svnignore'} ${process.env.GITHUB_WORKSPACE + '/'} ${process.env.INPUT_SVN_PATH} --delete --delete-excluded`;
 
+// Dopo l'rsync verifico che non ci siano file di Git
+if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
+  echo`➤ Controllo i file di Git...`;
+  if (fs.existsSync(path.join(svnDir, '.git'))) {
+    echo`ℹ︎ Trovata cartella .git, annullo il deploy. Aggiungerla a .svnignore.`;
+    await $`exit 1`;
+  }
+  if (fs.existsSync(path.join(svnDir, '.github'))) {
+    echo`ℹ︎ Trovata cartella .github, annullo il deploy. Aggiungerla a .svnignore.`;
+    await $`exit 1`;
+  }
+}
+
 echo`➤ Preparo i file per il commit...`
 await $`svn add . --force`; // > /dev/null
 await $`svn status ${process.env.INPUT_SVN_PATH} | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@`; // > /dev/null
@@ -48,7 +61,7 @@ await $`svn status`;
 
 const { version } = await fs.readJson(path.join(process.env.GITHUB_WORKSPACE, 'package.json'));
 
-if (process.env.INPUT_DRY_RUN) {
+if (process.env.INPUT_DRY_RUN === 'true') {
   echo`➤ Dry run: salto il commit.`
 }
 else {

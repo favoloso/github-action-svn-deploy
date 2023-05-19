@@ -20,6 +20,9 @@ inputs:
   svn-path:
     description: "Path all'interno repository SVN"
     default: 'trunk'
+  allow-git-files:
+    description: 'Consente di committare su SVN anche i file di Git'
+    default: false
 runs:
   using: 'composite'
   steps:
@@ -30,6 +33,7 @@ runs:
         INPUT_SVN_URL: ${{ inputs.svn-url }}
         INPUT_SVN_PATH: ${{ inputs.svn-path }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
+        INPUT_ALLOW_GIT_FILES: ${{ inputs.allow-git-files }}
       run: |
         npx zx ${{ github.action_path }}/deploy.mjs
       shell: bash
