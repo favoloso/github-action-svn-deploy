@@ -43,7 +43,23 @@ Vedere `man rsync` per la documentazione di `--include-from`.
 #### Note sui file inclusi
 
 - Le cartelle devono essere indicate con lo **/ finale** e tre asterischi `***`, (es. `assets/***`)
+  - `***` indica "la cartella stessa e tutti i suoi sottonodi"
+- In caso si voglia *escludere* una cartella, si può indicare con `- path` in una riga dedicata
+  - È necessario inserire la regola di esclusione **prima** della regola di inclusione della cartella padre
 - Le cartelle e i file annidati devono avere più entry che includono anche la cartella superiore (es. `assets/` e `assets/images/`, solo `assets/images/` non funziona)
+- È possibile aggiungere commenti con `#` all'inizio della riga
+
+#### Esempio
+
+```
+- /assets/private/***
+/assets/***
+/src/***
+# Oppure, se ad esempio ci sono solamente src/{js,css,dist} e si vuole includere solo dist 
+# (notare l'inclusione di `src` su linea dedicata)
+src/
+src/dist/***
+```
 
 ### `dry-run`
 
