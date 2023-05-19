@@ -1,4 +1,6 @@
 #!/usr/bin/env zx
+/// <reference path="node_modules/zx/build/globals.d.ts" />
+
 if (!process.env.INPUT_SVN_USERNAME) {
   echo`Missing INPUT_SVN_USERNAME`;
   await $`exit 1`;
