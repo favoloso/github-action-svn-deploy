@@ -1,10 +1,21 @@
 {
-  "name": "github-action-svn-deploy",
-  "version": "0.1.0",
+  "name": "@favoloso/github-action-svn-deploy",
+  "version": "1.0.0",
   "description": "GitHub Action per committare su SVN",
   "main": "action.yml",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "release": "release-it"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "Release v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    }
   },
   "repository": {
     "type": "git",
@@ -17,6 +28,7 @@
   },
   "homepage": "https://github.com/favoloso/github-action-svn-deploy#readme",
   "devDependencies": {
+    "release-it": "^15.10.3",
     "zx": "^7.2.2"
   }
 }
