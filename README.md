@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Deploy SVN
-        uses: favoloso/github-action-svn-deploy@main
+        uses: favoloso/github-action-svn-deploy@v1
         with:
           svn-username: ${{ secrets.SVN_USERNAME }}
           svn-password: ${{ secrets.SVN_PASSWORD }}
