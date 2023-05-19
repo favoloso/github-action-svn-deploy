@@ -56,7 +56,7 @@ if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
 echo`➤ Preparo i file per il commit...`
 await $`svn add . --force`; // > /dev/null
 await $`svn status ${process.env.INPUT_SVN_PATH} | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@`; // > /dev/null
-await $`svn update`;
+await $`svn update ${svnAuthFlags}`;
 await $`svn status`;
 
 const { version } = await fs.readJson(path.join(process.env.GITHUB_WORKSPACE, 'package.json'));
