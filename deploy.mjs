@@ -28,7 +28,7 @@ const svnAuthFlags = [
 
 echo`➤ Checkout della repository SVN...`
 await `svn checkout "${process.env.INPUT_SVN_URL}" "${svnDir}" --depth immediates ${svnAuthFlags}`;
-cd`${svnDir}`;
+cd(svnDir);
 await `svn update --set-depth infinity "${process.env.INPUT_SVN_PATH}" ${svnAuthFlags}`;
 
 echo`➤ Copio i file...`
