@@ -59,6 +59,9 @@ if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
 
 echo`➤ Preparo i file per il commit...`
 await $`svn add . --force`; // > /dev/null
+await $`svn status ${svnTargetPath}`;
+await $`svn status ${svnTargetPath} | grep '^\!'`; // > /dev/null
+await $`svn status ${svnTargetPath} | grep '^\!' | sed 's/! *//'`; // > /dev/null
 await $`svn status ${svnTargetPath} | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@`; // > /dev/null
 await $`svn update ${svnAuthFlags}`;
 await $`svn status`;
