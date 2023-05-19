@@ -21,6 +21,9 @@ if (!process.env.INPUT_SVN_PATH) {
   await $`exit 1`;
 }
 
+cd(process.env.GITHUB_WORKSPACE);
+const shortHash = await $`git rev-parse --short ${process.env.GITHUB_SHA}`;
+
 const svnDir = `${process.env.HOME}/svn-repo`;
 const svnAuthFlags = [
   `--username`,
@@ -60,21 +63,20 @@ if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
 }
 
 echo`➤ Preparo i file per il commit...`
-await $`svn add . --force`; // > /dev/null
+await $`svn add . --force > /dev/null`; // Gestiamo il log con `svn status` più avanti
 
 // Rimuovo i file cancellati
 await $`svn status ${svnTargetPath}`
   .pipe($`grep '^\\!'`.nothrow()) // Evitiamo di interrompere lo script se non ci sono file da rimuovere (grep ritorna 1 in caso di nessun match)
   .pipe($`sed 's/! *//'`)
   .pipe($`xargs -I% svn rm %@`); // > /dev/null
-  
+
 await $`svn update ${svnAuthFlags}`;
 await $`svn status`;
 
 const packageJsonPath = path.join(process.env.GITHUB_WORKSPACE, process.env.INPUT_PACKAGE_JSON_PATH);
 const { version } = await fs.readJson(packageJsonPath);
 
-const shortHash = await $`git rev-parse --short ${process.env.GITHUB_SHA}`;
 const commitMessage = process.env.INPUT_COMMIT_MESSAGE
   .replace(/%version%/g, version)
   .replace(/%sha%/g, shortHash);
