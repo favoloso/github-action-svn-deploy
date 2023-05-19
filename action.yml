@@ -7,7 +7,7 @@ branding:
 inputs:
   dry-run:
     description: "Esegue l'operazione senza committare."
-    default: false
+    default: 'false'
   svn-username:
     description: 'Username SVN'
     required: true
@@ -21,7 +21,7 @@ inputs:
     description: "Path all'interno repository SVN"
     default: 'trunk'
   svn-include-from:
-    description: 'Path del file .svninclude che definisce l\'elenco dei file da includere con rsync. Vedere `man rsync` alla voce "--include-from" e "FILTER RULES" per maggiori informazioni'
+    description: "Path del file .svninclude che definisce l'elenco dei file da includere con rsync. Vedere `man rsync` alla voce `--include-from` e `FILTER RULES` per maggiori informazioni"
     default: '.svninclude'
   package-json-path:
     description: 'Path del package.json da cui estrarre la versione'
@@ -31,7 +31,7 @@ inputs:
     default: 'Rilascio %version%'
   allow-git-files:
     description: 'Consente di committare su SVN anche i file di Git'
-    default: false  
+    default: 'false'
 runs:
   using: 'composite'
   steps:
