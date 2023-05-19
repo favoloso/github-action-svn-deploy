@@ -20,6 +20,9 @@ inputs:
   svn-path:
     description: "Path all'interno repository SVN"
     default: 'trunk'
+  package-json-path:
+    description: 'Path del package.json da cui estrarre la versione'
+    default: 'package.json'
   commit-message:
     description: 'Messaggio del commit (placeholder: %version%, %sha%)'
     default: 'Rilascio %version%'
@@ -38,6 +41,7 @@ runs:
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
         INPUT_ALLOW_GIT_FILES: ${{ inputs.allow-git-files }}
         INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}
+        INPUT_PACKAGE_JSON_PATH: ${{ inputs.package-json-path }}
       run: |
         npx zx ${{ github.action_path }}/deploy.mjs
       shell: bash

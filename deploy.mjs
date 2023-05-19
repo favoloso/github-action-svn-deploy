@@ -59,7 +59,8 @@ await $`svn status ${process.env.INPUT_SVN_PATH} | grep '^\!' | sed 's/! *//' | 
 await $`svn update ${svnAuthFlags}`;
 await $`svn status`;
 
-const { version } = await fs.readJson(path.join(process.env.GITHUB_WORKSPACE, 'package.json'));
+const packageJsonPath = path.join(process.env.GITHUB_WORKSPACE, process.env.INPUT_PACKAGE_JSON_PATH);
+const { version } = await fs.readJson(packageJsonPath);
 
 const shortHash = await $`git rev-parse --short ${process.env.GITHUB_SHA}`;
 const commitMessage = process.env.INPUT_COMMIT_MESSAGE
