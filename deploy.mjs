@@ -39,7 +39,10 @@ if (!fs.existsSync(svnIncludePath)) {
   echo`ℹ︎ Impossibile trovare il file ${svnIncludePath}, annullo il deploy.`;
   await $`exit 1`;
 }
-await $`rsync -rc --include="*/" --include-from=${svnIncludePath} --exclude="*" --prune-empty-dirs ${process.env.GITHUB_WORKSPACE + '/'} ${process.env.INPUT_SVN_PATH} --delete --delete-excluded`;
+
+// Ci assicuriamo che il path di SVN termini con uno slash
+const svnTargetPath = process.env.INPUT_SVN_PATH.replace(/\/$/, '') + '/';
+await $`rsync -rc --include="*/" --include-from=${svnIncludePath} --exclude="*" --prune-empty-dirs ${process.env.GITHUB_WORKSPACE + '/'} ${svnTargetPath} --delete --delete-excluded`;
 
 // Dopo l'rsync verifico che non ci siano file di Git
 if (process.env.INPUT_ALLOW_GIT_FILES !== 'true') {
